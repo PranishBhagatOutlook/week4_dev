@@ -23,12 +23,16 @@ public class MyController {
     @RequestMapping(value = "/populate", method = RequestMethod.GET)
     public ResponseEntity populate() {
         superRepository.populate();
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(
+//                superRepository.getTeams(),
+                HttpStatus.OK);
     }
 
     @RequestMapping(value = "/teams", method = RequestMethod.GET)
     public ResponseEntity<Team> getTeams() {
-        return new ResponseEntity(superRepository.getTeams(), HttpStatus.OK);
+        return new ResponseEntity(
+                superRepository.getTeams(),
+                HttpStatus.OK);
     }
 
 }

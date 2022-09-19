@@ -3,12 +3,20 @@ package com.example.week4;
 import com.example.week4.model.Contest;
 import com.example.week4.model.Person;
 import com.example.week4.model.Team;
+import com.example.week4.services.SuperRepository;
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.persistence.EntityManager;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -102,20 +110,27 @@ public class Week4ApplicationTests {
         return team;
     }
 
+
+//    @ParameterizedTest
+//    @MethodSource("populate")
+//    public void demoTest(){
+//    }
     @Test
     public void firstTest() {
         populate();
-        List<String> expectedName = Arrays.asList(new String[]{"TeamA", "TeamB", "TeamC"});
+//        List<String> expectedName = Arrays.asList(new String[]{"TeamA", "TeamB", "TeamC"});
         List<Team> dbTeam = em.getEntityManager().createQuery("SELECT t FROM Team t").getResultList();
         List<String> teamName = dbTeam.stream().map(i -> i.getName()).collect(Collectors.toList());
-        System.out.println("First Test");
-        assertEquals(expectedName, teamName);
+        System.out.println("2. Select all teams in the given contest and print them (JUnit)");
+        System.out.println("Team Names are: ");
+        System.out.println(teamName);
+//        assertEquals(expectedName, teamName);
     }
 
     @Test
     public void secondTest() {
-        populate();
-        List<Integer> expectedAge = Arrays.asList(new Integer[]{29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 29});
+       populate();
+//        List<Integer> expectedAge = Arrays.asList(new Integer[]{29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 29});
         List<Person> dbPerson = em.getEntityManager().createQuery("SELECT p FROM Person p").getResultList();
         List<Date> birthDate = dbPerson.stream().map(i -> i.getBirthDate()).collect(Collectors.toList());
         List<Integer> actualAge = new ArrayList();
@@ -124,10 +139,12 @@ public class Week4ApplicationTests {
             cal.setTime(d);
             actualAge.add(2022 - cal.get(Calendar.YEAR));
         }
-        assertEquals(expectedAge, actualAge);
+//        assertEquals(expectedAge, actualAge);
+        System.out.println("3.  provide a report stating how many students there are grouped by age (JUnit)");
+        System.out.println("Age Count");
         Set<Integer> st = new HashSet<Integer>(actualAge);
         for (Integer i : st)
-            System.out.println(i + ": " + Collections.frequency(actualAge, i));
+            System.out.println(i + "    " + Collections.frequency(actualAge, i));
 
     }
 
@@ -143,9 +160,11 @@ public class Week4ApplicationTests {
             }
         }
         List<String> teamName = dbTeam.stream().map(i -> i.getName()).collect(Collectors.toList());
+        System.out.println("4.  calculate the current contest occupancy and compare it with the capacity of the contest (JUnit)");
         System.out.println("Expected capacity for Contest " + dbContest.getName() + " is " + dbContest.getCapacity());
-        ;
         System.out.println("Actual capacity for Contest " + dbContest.getName() + " is " + teamName.size());
+        Integer occupacy = dbContest.getCapacity() - teamName.size();
+        System.out.println("Remaining Occupacy for the contest " + dbContest.getName() + " is " + occupacy);
 
 
     }

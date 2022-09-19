@@ -17,15 +17,28 @@ public class Team implements Serializable {
     private String name;
     @Column(nullable = true)
     private Integer rank;
+
     @Column(nullable = false)
     private State state;
     //    @Size(min = 1, max =3)
+
+
+    @Column(nullable = false)
+    private State state;
+
+//    @Size(min = 1, max =3)
+
     @OneToMany
     private Set<Person> contestant = new HashSet();
     //    @Column(nullable = false)
     @ManyToOne
     private Contest contest;
     //    @Size(min = 0, max =1)
+    @OneToOne
+    private Person coach;
+    @ManyToOne
+    private Contest contest;
+    //    @Size(max =1)
     @OneToOne
     private Person coach;
 
@@ -52,6 +65,9 @@ public class Team implements Serializable {
     public void setCoach(Person coach) {
         this.coach = coach;
     }
+
+
+//    @Column(nullable = false)
 
     public Contest getContest() {
         return contest;
@@ -91,6 +107,10 @@ public class Team implements Serializable {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public static enum State {
+        ACCEPTED, PENDING, CANCELED
     }
 
     public static enum State {
