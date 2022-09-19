@@ -3,8 +3,8 @@ package com.example.week4;
 import com.example.week4.model.Contest;
 import com.example.week4.model.Person;
 import com.example.week4.model.Team;
-import org.junit.runner.RunWith;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -12,8 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.time.*;
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -22,11 +21,12 @@ public class Week4ApplicationTests {
 
     @Autowired
     private TestEntityManager em;
-    public void populate(){
-        Contest contest = createContest(50,new Date("01/01/2022"), "45th World Finals",
-                true, new Date("01/01/2021"),new Date("12/31/2021"), null);
-        Contest contest1 = createContest(50,new Date("01/01/2022"), "2022 NAC Regionals",
-                true, new Date("01/01/2021"),new Date("12/31/2021"), contest.getId());
+
+    public void populate() {
+        Contest contest = createContest(50, new Date("01/01/2022"), "45th World Finals",
+                true, new Date("01/01/2021"), new Date("12/31/2021"), null);
+        Contest contest1 = createContest(50, new Date("01/01/2022"), "2022 NAC Regionals",
+                true, new Date("01/01/2021"), new Date("12/31/2021"), contest.getId());
 
         Person person1 = createPerson(new Date("1/1/1993"), "1bhagatpranish@gmail.com", "Pranish Bhagat", "Baylor University");
         Person person2 = createPerson(new Date("2/2/1994"), "2bhagatpranish@gmail.com", "2Pranish Bhagat", "2Baylor University");
@@ -45,19 +45,19 @@ public class Week4ApplicationTests {
         Person contestManager = createPerson(new Date("10/12/1993"), "contestmanager@gmail.com", "Contest Manager", "Contest Manager University");
         contest1.getContestManager().add(contestManager);
         contest.getContestManager().add(contestManager);
-        Team team1 = createTeam("TeamA",null, Team.State.PENDING);
+        Team team1 = createTeam("TeamA", null, Team.State.PENDING);
         team1.getContestant().add(person1);
         team1.getContestant().add(person2);
         team1.getContestant().add(person3);
         team1.setCoach(person4);
         team1.setContest(contest1);
-        Team team2 = createTeam("TeamB",null, Team.State.PENDING);
+        Team team2 = createTeam("TeamB", null, Team.State.PENDING);
         team2.getContestant().add(person5);
         team2.getContestant().add(person6);
         team2.getContestant().add(person7);
         team2.setCoach(person8);
         team2.setContest(contest1);
-        Team team3 = createTeam("TeamC",null, Team.State.PENDING);
+        Team team3 = createTeam("TeamC", null, Team.State.PENDING);
         team3.getContestant().add(person9);
         team3.getContestant().add(person10);
         team3.getContestant().add(person11);
@@ -68,7 +68,7 @@ public class Week4ApplicationTests {
 
     private Contest createContest(Integer capacity, Date date,
                                   String name, Boolean registration_allowed,
-                                  Date registration_from, Date registration_to, Long superContestId){
+                                  Date registration_from, Date registration_to, Long superContestId) {
         Contest contest = new Contest();
         contest.setCapacity(capacity);
         contest.setDate(date);
@@ -83,7 +83,7 @@ public class Week4ApplicationTests {
 
 //    private Team createTeam(String name, Integer rank, Team.State state){}
 
-    private Person createPerson(Date birthDate, String email, String name, String university){
+    private Person createPerson(Date birthDate, String email, String name, String university) {
         Person person = new Person();
         person.setBirthDate(birthDate);
         person.setEmail(email);
@@ -93,7 +93,7 @@ public class Week4ApplicationTests {
         return person;
     }
 
-    private Team createTeam(String name, Integer rank, Team.State state){
+    private Team createTeam(String name, Integer rank, Team.State state) {
         Team team = new Team();
         team.setName(name);
         team.setRank(rank);
@@ -103,28 +103,28 @@ public class Week4ApplicationTests {
     }
 
     @Test
-    public void firstTest(){
+    public void firstTest() {
         populate();
-        List<String> expectedName = Arrays.asList(new String[] { "TeamA","TeamB","TeamC" });
-       List<Team> dbTeam = em.getEntityManager().createQuery("SELECT t FROM Team t").getResultList();
-       List<String> teamName = dbTeam.stream().map(i->i.getName()).collect(Collectors.toList());
+        List<String> expectedName = Arrays.asList(new String[]{"TeamA", "TeamB", "TeamC"});
+        List<Team> dbTeam = em.getEntityManager().createQuery("SELECT t FROM Team t").getResultList();
+        List<String> teamName = dbTeam.stream().map(i -> i.getName()).collect(Collectors.toList());
         System.out.println("First Test");
-        assertEquals(expectedName,teamName);
+        assertEquals(expectedName, teamName);
     }
 
     @Test
-    public void secondTest(){
+    public void secondTest() {
         populate();
-        List<Integer> expectedAge = Arrays.asList(new Integer[] { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 29 });
+        List<Integer> expectedAge = Arrays.asList(new Integer[]{29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 29});
         List<Person> dbPerson = em.getEntityManager().createQuery("SELECT p FROM Person p").getResultList();
-        List<Date> birthDate = dbPerson.stream().map(i->i.getBirthDate()).collect(Collectors.toList());
+        List<Date> birthDate = dbPerson.stream().map(i -> i.getBirthDate()).collect(Collectors.toList());
         List<Integer> actualAge = new ArrayList();
-        for(Date d: birthDate){
+        for (Date d : birthDate) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(d);
             actualAge.add(2022 - cal.get(Calendar.YEAR));
         }
-        assertEquals(expectedAge,actualAge);
+        assertEquals(expectedAge, actualAge);
         Set<Integer> st = new HashSet<Integer>(actualAge);
         for (Integer i : st)
             System.out.println(i + ": " + Collections.frequency(actualAge, i));
@@ -132,21 +132,20 @@ public class Week4ApplicationTests {
     }
 
     @Test
-    public void thirdTest(){
+    public void thirdTest() {
         populate();
-        Contest dbContest = (Contest)em.getEntityManager().createQuery("SELECT c FROM Contest c").getResultList().get(1);
+        Contest dbContest = (Contest) em.getEntityManager().createQuery("SELECT c FROM Contest c").getResultList().get(1);
         List<Team> dbTeam = em.getEntityManager().createQuery("SELECT t FROM Team t").getResultList();
         List<Team> filteredTeam = new ArrayList<>();
-        for(Team m: dbTeam){
-            if(m.getContest().getName() =="2022 NAC Regionals"){
+        for (Team m : dbTeam) {
+            if (m.getContest().getName() == "2022 NAC Regionals") {
                 filteredTeam.add(m);
             }
         }
-        List<String> teamName = dbTeam.stream().map(i->i.getName()).collect(Collectors.toList());
-        System.out.println("Expected capacity for Contest " + dbContest.getName() + " is "+ dbContest.getCapacity());;
+        List<String> teamName = dbTeam.stream().map(i -> i.getName()).collect(Collectors.toList());
+        System.out.println("Expected capacity for Contest " + dbContest.getName() + " is " + dbContest.getCapacity());
+        ;
         System.out.println("Actual capacity for Contest " + dbContest.getName() + " is " + teamName.size());
-
-
 
 
     }

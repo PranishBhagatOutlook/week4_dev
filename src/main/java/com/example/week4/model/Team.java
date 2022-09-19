@@ -49,7 +49,6 @@ public class Team implements Serializable {
     }
 
 
-
     public Contest getContest() {
         return contest;
     }
@@ -69,7 +68,6 @@ public class Team implements Serializable {
     public static enum State {
         ACCEPTED, PENDING, CANCELED
     }
-
 
     public Long getId() {
         return id;
@@ -98,4 +96,6 @@ public class Team implements Serializable {
     public void setState(State state) {
         this.state = state;
     }
+
+
 }

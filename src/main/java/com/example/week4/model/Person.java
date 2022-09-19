@@ -28,7 +28,6 @@ public class Person implements Serializable {
     @Column(nullable = false)
     private Date birthDate;
 
-
     @ManyToOne
     private Team team;
 
@@ -39,37 +38,56 @@ public class Person implements Serializable {
         return id;
     }
 
-    public String getEmail(){
-        return email;
-    }
-    public void setEmail(String email){
-        this.email = email;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getUniversity(){
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUniversity() {
         return university;
     }
 
-    public void setUniversity(String university){
+    public void setUniversity(String university) {
         this.university = university;
     }
 
-    public Date getBirthDate(){
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate){
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
+    public Team getTeam() {
+        return team;
+    }
 
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public Set<Contest> getContests() {
+        return contests;
+    }
+
+    public void setContests(Set<Contest> contests) {
+        this.contests = contests;
+    }
 }
 
