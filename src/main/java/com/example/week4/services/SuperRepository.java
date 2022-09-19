@@ -20,7 +20,6 @@ public class SuperRepository {
     public void populate(){
         Contest contest = createContest(50,new Date("01/01/2022"), "45th World Finals",
                 true, new Date("01/01/2021"),new Date("12/31/2021"), null);
-
         Contest contest1 = createContest(50,new Date("01/01/2022"), "2022 NAC Regionals",
                 true, new Date("01/01/2021"),new Date("12/31/2021"), contest.getId());
 
