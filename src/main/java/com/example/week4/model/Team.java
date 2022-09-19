@@ -1,13 +1,10 @@
 package com.example.week4.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-//import javax.validation.constraints.Size;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Team implements Serializable {
@@ -21,10 +18,11 @@ public class Team implements Serializable {
     @Column(nullable = true)
     private Integer rank;
 
+
     @Column(nullable = false)
     private State state;
 
-    //    @Size(min = 1, max =3)
+    @Size(min = 1, max =3)
     @OneToMany
     private Set<Person> contestant = new HashSet();
 
@@ -57,11 +55,14 @@ public class Team implements Serializable {
         this.contest = contest;
     }
 
-    //    @Column(nullable = false)
+//    @Column(nullable = false)
+
+
     @ManyToOne
     private Contest contest;
 
-    //    @Size(min = 0, max =1)
+
+    //    @Size(max =1)
     @OneToOne
     private Person coach;
 
