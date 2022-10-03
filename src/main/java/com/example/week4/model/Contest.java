@@ -1,6 +1,8 @@
 package com.example.week4.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -11,10 +13,8 @@ public class Contest implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-
-
     // this is the parentId for the subContests.
-    private Long superContestId;
+
 
     @Column(nullable = false)
     private Integer capacity;
@@ -32,10 +32,24 @@ public class Contest implements Serializable {
 
     @Column(nullable = false)
     private Date registration_to;
+    @Size(max=1)
+    private Long superContestId;
 
+    private Boolean writable;
+
+    public Boolean getWritable() {
+        return writable;
+    }
+
+    public void setWritable(Boolean writable) {
+        this.writable = writable;
+    }
+
+    @NotNull
     @ManyToMany
     private Set<Person> contestManager = new HashSet();
 
+    @NotNull
     @OneToMany
     private Set<Team> teams = new HashSet();
 
@@ -118,4 +132,6 @@ public class Contest implements Serializable {
     public void setTeams(Set<Team> teams) {
         this.teams = teams;
     }
+
+
 }

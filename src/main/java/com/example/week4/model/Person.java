@@ -17,16 +17,18 @@ public class Person implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
-
+    private Date birthDate;
     @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String university;
+    private String name;
+
 
     @Column(nullable = false)
-    private Date birthDate;
+    private String university;
+
+
 
     @ManyToOne
     private Team team;

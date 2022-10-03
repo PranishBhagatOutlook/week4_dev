@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -20,9 +19,9 @@ public class SuperRepository {
 
     public void populate() {
         Contest contest = createContest(50, new Date("01/01/2022"), "45th World Finals",
-                true, new Date("01/01/2021"), new Date("12/31/2021"), null);
+                true, new Date("01/01/2021"), new Date("12/31/2021"), null, true);
         Contest contest1 = createContest(50, new Date("01/01/2022"), "2022 NAC Regionals",
-                true, new Date("01/01/2021"), new Date("12/31/2021"), contest.getId());
+                true, new Date("01/01/2021"), new Date("12/31/2021"), contest.getId(), true);
 
         Person person1 = createPerson(new Date("1/1/1993"), "1bhagatpranish@gmail.com", "Pranish Bhagat", "Baylor University");
         Person person2 = createPerson(new Date("2/2/1994"), "2bhagatpranish@gmail.com", "2Pranish Bhagat", "2Baylor University");
@@ -41,19 +40,19 @@ public class SuperRepository {
         Person contestManager = createPerson(new Date("10/12/1993"), "contestmanager@gmail.com", "Contest Manager", "Contest Manager University");
         contest1.getContestManager().add(contestManager);
         contest.getContestManager().add(contestManager);
-        Team team1 = createTeam("TeamA", null, Team.State.PENDING);
+        Team team1 = createTeam("TeamA", null, Team.State.PENDING, true);
         team1.getContestant().add(person1);
         team1.getContestant().add(person2);
         team1.getContestant().add(person3);
         team1.setCoach(person4);
         team1.setContest(contest1);
-        Team team2 = createTeam("TeamB", null, Team.State.PENDING);
+        Team team2 = createTeam("TeamB", null, Team.State.PENDING, true);
         team2.getContestant().add(person5);
         team2.getContestant().add(person6);
         team2.getContestant().add(person7);
         team2.setCoach(person8);
         team2.setContest(contest1);
-        Team team3 = createTeam("TeamC", null, Team.State.PENDING);
+        Team team3 = createTeam("TeamC", null, Team.State.PENDING, true);
         team3.getContestant().add(person9);
         team3.getContestant().add(person10);
         team3.getContestant().add(person11);
@@ -64,7 +63,7 @@ public class SuperRepository {
 
     private Contest createContest(Integer capacity, Date date,
                                   String name, Boolean registration_allowed,
-                                  Date registration_from, Date registration_to, Long superContestId) {
+                                  Date registration_from, Date registration_to, Long superContestId, Boolean writable) {
         Contest contest = new Contest();
         contest.setCapacity(capacity);
         contest.setDate(date);
@@ -73,6 +72,7 @@ public class SuperRepository {
         contest.setRegistration_from(registration_from);
         contest.setRegistration_to(registration_to);
         contest.setSuperContestId(superContestId);
+        contest.setWritable(writable);
         em.persist(contest);
         return contest;
     }
@@ -89,11 +89,12 @@ public class SuperRepository {
         return person;
     }
 
-    private Team createTeam(String name, Integer rank, Team.State state) {
+    private Team createTeam(String name, Integer rank, Team.State state, Boolean writable) {
         Team team = new Team();
         team.setName(name);
         team.setRank(rank);
         team.setState(state);
+        team.setWritable(writable);
         em.persist(team);
         return team;
     }
@@ -103,5 +104,15 @@ public class SuperRepository {
     public List<Team> getTeams() {
         return em.createQuery("SELECT c FROM Team c").getResultList();
     }
+
+    public List<Person> getPersons() {
+        return em.createQuery("SELECT c FROM Person c").getResultList();
+    }
+
+    public List<Contest> getContests() {
+        return em.createQuery("SELECT c FROM Contest c").getResultList();
+    }
+
+
 
 }

@@ -1,6 +1,8 @@
 package com.example.week4.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +13,7 @@ public class Team implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = true)
-    private Long promotedTeamId;
+
     @Column(nullable = false)
     private String name;
     @Column(nullable = true)
@@ -22,33 +23,34 @@ public class Team implements Serializable {
     private State state;
     //    @Size(min = 1, max =3)
 
+    @Column(nullable = true)
+    private Long promotedTeamId;
 
-    @Column(nullable = false)
-    private State state;
 
-//    @Size(min = 1, max =3)
-
+@Size(min=1,max=3)
     @OneToMany
     private Set<Person> contestant = new HashSet();
     //    @Column(nullable = false)
+    @NotNull
     @ManyToOne
     private Contest contest;
-    //    @Size(min = 0, max =1)
+    @Size(min = 0, max =1)
     @OneToOne
     private Person coach;
-    @ManyToOne
-    private Contest contest;
-    //    @Size(max =1)
-    @OneToOne
-    private Person coach;
+    public static enum State {
+        ACCEPTED, PENDING, CANCELED
+    }
+    private Boolean writable;
 
-    public Long getPromotedTeamId() {
-        return promotedTeamId;
+    public Boolean getWritable() {
+        return writable;
     }
 
-    public void setPromotedTeamId(Long promotedTeamId) {
-        this.promotedTeamId = promotedTeamId;
+    public void setWritable(Boolean writable) {
+        this.writable = writable;
     }
+
+
 
     public Set<Person> getContestant() {
         return contestant;
@@ -109,13 +111,14 @@ public class Team implements Serializable {
         this.state = state;
     }
 
-    public static enum State {
-        ACCEPTED, PENDING, CANCELED
+    public Long getPromotedTeamId() {
+        return promotedTeamId;
     }
 
-    public static enum State {
-        ACCEPTED, PENDING, CANCELED
+    public void setPromotedTeamId(Long promotedTeamId) {
+        this.promotedTeamId = promotedTeamId;
     }
+
 
 
 }

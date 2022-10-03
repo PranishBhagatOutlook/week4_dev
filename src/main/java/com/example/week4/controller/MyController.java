@@ -28,11 +28,11 @@ public class MyController {
                 HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/teams", method = RequestMethod.GET)
-    public ResponseEntity<Team> getTeams() {
-        return new ResponseEntity(
-                superRepository.getTeams(),
-                HttpStatus.OK);
-    }
+//    @RequestMapping(value = "/teams", method = RequestMethod.GET)
+//    public ResponseEntity<Team> getTeams() {
+//        return new ResponseEntity(
+//                superRepository.getTeams(),
+//                HttpStatus.OK);
+//    }
 
 }
