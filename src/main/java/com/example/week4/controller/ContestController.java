@@ -51,17 +51,26 @@ public class ContestController {
         return contestService.editContest(contestId,contest);
     }
 
-    @PutMapping(path="/setEditable/{contestId}/{writable}")
+    @PutMapping(path="/setEditable/{contestId}")
     public Contest setEditable(
-            @PathVariable("contestId") Long contestId,
-            @PathVariable("writable") Boolean writable) {
-        return contestService.setEditable(contestId,writable);
+            @PathVariable("contestId") Long contestId
+           ) {
+        return contestService.setEditable(contestId);
     }
 
-    @PutMapping(path="/setReadOnly/{contestId}/{writable}")
+
+    @PutMapping(path="/setReadOnly/{contestId}")
     public Contest setReadOnly(
-            @PathVariable("contestId") Long contestId,
-            @PathVariable("writable") Boolean writable) {
-        return contestService.setReadOnly(contestId,writable);
+            @PathVariable("contestId") Long contestId){
+       return contestService.setReadOnly(contestId);
     }
+
+    @PutMapping(path="/editName/{contestId}")
+    public Contest editName(
+            @PathVariable("contestId") Long contestId,
+            @RequestParam("name") String name){
+        return contestService.editName(contestId, name);
+    }
+
+
 }

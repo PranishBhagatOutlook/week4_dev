@@ -26,9 +26,19 @@ public class Team implements Serializable {
     @Column(nullable = true)
     private Long promotedTeamId;
 
+    @Column(nullable=true)
+    private Long promotedFromContestId;
 
-@Size(min=1,max=3)
-    @OneToMany
+    public Long getPromotedFromContestId() {
+        return promotedFromContestId;
+    }
+
+    public void setPromotedFromContestId(Long promotedFromContestId) {
+        this.promotedFromContestId = promotedFromContestId;
+    }
+
+    @Size(min=1,max=3)
+    @ManyToMany
     private Set<Person> contestant = new HashSet();
     //    @Column(nullable = false)
     @NotNull

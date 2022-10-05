@@ -2,11 +2,14 @@ package com.example.week4.services;
 
 import com.example.week4.model.Contest;
 import com.example.week4.model.Person;
+import com.example.week4.model.Team;
 import com.example.week4.repository.ContestRepository;
 import com.example.week4.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 @Service
 public class PersonService {
@@ -23,6 +26,9 @@ public class PersonService {
     }
 
 
+    public List<Person> getPersonByTeamId(Long teamId){
+        return personRepository.getPersonByTeamId(teamId);
+    }
 
     public Person createPerson(Person person){
         return personRepository.save(person);

@@ -1,4 +1,6 @@
 package com.example.week4.controller;
+import com.example.week4.errors.CustomException;
+import com.example.week4.model.PromoteTeamDTO;
 import com.example.week4.model.Team;
 import com.example.week4.repository.TeamRepository;
 import com.example.week4.services.SuperRepository;
@@ -43,11 +45,20 @@ public class TeamController{
         return teamService.createTeam(team);
     }
 
-    @PostMapping("/contestRegister")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Team contestRegister(@RequestBody  Team team, @RequestParam  Long contestId) {
-        return teamService.contestRegister(team,contestId);
+//    @PostMapping("/contestRegister")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Team contestRegister(@RequestBody  Team team, @RequestParam  Long contestId) {
+//        return teamService.contestRegister(team,contestId);
+//    }
+
+    @PostMapping("/contestRegister/{teamId}/{contestId}")
+    public Team contestRegister(@PathVariable("teamId") Long teamId,
+                                @PathVariable("contestId") Long contestId){
+       return teamService.contestRegister(teamId, contestId);
+
     }
+
+
 
     @PutMapping(path="/editTeam/{teamId}")
     public Team editTeam(
@@ -71,4 +82,9 @@ public class TeamController{
     }
 
 
+    @PutMapping(path="/promoteTeam")
+    public Team setPromoteTeam(
+            @RequestBody PromoteTeamDTO promoteTeamDTO) throws Exception {
+        return teamService.promoteTeam(promoteTeamDTO);
+    }
 }

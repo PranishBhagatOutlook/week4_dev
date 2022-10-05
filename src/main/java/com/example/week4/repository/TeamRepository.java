@@ -1,5 +1,7 @@
 package com.example.week4.repository;
 
+import com.example.week4.model.Contest;
+import com.example.week4.model.Person;
 import com.example.week4.model.Team;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,6 +20,11 @@ public interface TeamRepository extends CrudRepository<Team, Long> {
 //    public Team findTeamById(Long id);
 
 
-    List<Team> findByContestId(@Param("contestId") Long contestId);
+    List<Team> findByContestId(Long contestId);
+
+    Team findTeamById(Long teamId);
+
+    List<Team> findTeamsByContestantIdAndContestId(@Param("personId") Long personId,
+                                                 @Param("contestId") Long contestId);
 
 }

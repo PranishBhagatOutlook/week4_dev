@@ -1,5 +1,6 @@
 package com.example.week4.services;
 
+import com.example.week4.errors.CustomException;
 import com.example.week4.model.Contest;
 import com.example.week4.model.ContestDto;
 import com.example.week4.model.Team;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.lang.reflect.Array;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import static jdk.nashorn.internal.objects.NativeDebug.map;
+
 
 @Service
 public class ContestService {
@@ -45,17 +47,14 @@ public class ContestService {
         return  teamsInContest.size();
     }
 
-    private ContestDto buildDto(Contest contest) {
-        return new ContestDto(contest.getName(), contest.getCapacity(), contest.getDate(), contest.getRegistration_allowed(),
-                contest.getRegistration_to(), contest.getRegistration_from());
+    public void checkAvailableCapacity(Long contestId){
+        Integer availableContestCapacity =
+                findContestById(contestId).getCapacity() - exhaustedCapacity(contestId);
+        if (!(availableContestCapacity > 0)) {
+            throw new CustomException("Contest capacity limit reached.");
+        }
     }
-    @Transactional
-    public ContestDto updateFromDto(Long contestId, ContestDto dto) {
-        Contest contest = findContestById(contestId);
-        map(contest, dto);
-        contestRepository.save(contest);
-        return buildDto(contest);
-    }
+
 
 
     public Contest editContest(@PathVariable("contestId") Long contestId,
@@ -76,15 +75,30 @@ public class ContestService {
     }
 
 
-    public Contest setEditable(@PathVariable("contestId") Long contestId, Boolean writable){
+    public Contest setEditable(@PathVariable("contestId") Long contestId){
         Contest contest = findContestById(contestId);
-        contest.setWritable(writable);
+        contest.setWritable(true);
         contestRepository.save(contest);
         return contest;
     }
-    public Contest setReadOnly(@PathVariable("contestId") Long contestId, Boolean writable){
+
+    public Contest setReadOnly( @PathVariable("contestId") Long contestId){
         Contest contest = findContestById(contestId);
-        contest.setWritable(writable);
+        contest.setWritable(false);
+        contestRepository.save(contest);
+        return contest;
+    }
+
+    public Contest editName(@PathVariable("contestId") Long contestId,
+                            @RequestParam("name") String name){
+        Contest contest = findContestById(contestId);
+        if (contest.getName()==null){
+            throw new CustomException("The contest does not exist");
+        }
+        if (contest.getWritable()==false){
+            throw new CustomException("The contest is not editable. Please set the writable flag to true");
+        }
+        contest.setName(name);
         contestRepository.save(contest);
         return contest;
     }

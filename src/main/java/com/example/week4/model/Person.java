@@ -14,6 +14,7 @@ import java.util.Set;
 public class Person implements Serializable {
     @Id
     @GeneratedValue
+    @Column(name = "personId")
     private Long id;
 
     @Column(nullable = false)
@@ -30,8 +31,12 @@ public class Person implements Serializable {
 
 
 
-    @ManyToOne
-    private Team team;
+    @ManyToMany
+    private Set<Team> team;
+
+    public void setTeam(Set<Team> team) {
+        this.team = team;
+    }
 
     @ManyToMany
     private Set<Contest> contests = new HashSet();
@@ -76,13 +81,13 @@ public class Person implements Serializable {
         this.birthDate = birthDate;
     }
 
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
+//    public Team getTeam() {
+//        return team;
+//    }
+//
+//    public void setTeam(Team team) {
+//        this.team = team;
+//    }
 
     public Set<Contest> getContests() {
         return contests;
