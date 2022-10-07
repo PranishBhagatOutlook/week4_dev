@@ -29,6 +29,17 @@ public class Team implements Serializable {
     @Column(nullable=true)
     private Long promotedFromContestId;
 
+    @Column(nullable = true)
+    private Long originalTeamId;
+
+    public Long getOriginalTeamId() {
+        return originalTeamId;
+    }
+
+    public void setOriginalTeamId(Long originalTeamId) {
+        this.originalTeamId = originalTeamId;
+    }
+
     public Long getPromotedFromContestId() {
         return promotedFromContestId;
     }

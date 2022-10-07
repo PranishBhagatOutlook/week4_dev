@@ -50,7 +50,7 @@ public class Contest implements Serializable {
     private Set<Person> contestManager = new HashSet();
 
     @NotNull
-    @OneToMany
+    @ManyToMany
     private Set<Team> teams = new HashSet();
 
     public Long getId() {

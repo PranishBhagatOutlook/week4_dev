@@ -6,6 +6,8 @@ import com.example.week4.model.Person;
 import com.example.week4.model.PromoteTeamDTO;
 import com.example.week4.model.Team;
 import com.example.week4.repository.TeamRepository;
+import lombok.val;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +20,10 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class TeamService {
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
     @Autowired
     private TeamRepository teamRepository;
 
@@ -46,13 +51,27 @@ public class TeamService {
     }
 
 
+    public Team registerTeam(Team team){
+        Team registeredTeam = new Team();
+        registeredTeam.setName(team.getName());
+        registeredTeam.setRank(team.getRank());
+        registeredTeam.setState(team.getState());
+        registeredTeam.setWritable(team.getWritable());
+        registeredTeam.setCoach(team.getCoach());
+        registeredTeam.setOriginalTeamId(team.getId());
+        for (Person p: team.getContestant()){
+            registeredTeam.getContestant().add(p);
+        }
+        return registeredTeam;
+    }
 
     public Team contestRegister(Long teamId, Long contestId) {
         Contest contest = contestService.findContestById(contestId);
         Team team = checkTeamRegistration(teamRepository.findTeamById(teamId), contestId);
-        team.setContest(contest);
-        teamRepository.save(team);
-        return team;
+        Team registeredTeam = registerTeam(team);
+        registeredTeam.setContest(contest);
+        teamRepository.save(registeredTeam);
+        return registeredTeam;
     }
     public Team checkTeamRegistration(Team team, Long contestId){
         checkCoach(team);
@@ -164,18 +183,18 @@ public List<Team> findTeamsByContestantIdAndContestId(Long personId, Long contes
 
     public Team promoteTeam(@RequestBody PromoteTeamDTO promoteTeamDTO) throws Exception {
         Long contestId = promoteTeamDTO.getContestId();
-
         if (contestId == null) {
             throw new CustomException("Null ContestId");
         }
+
         Long teamId = promoteTeamDTO.getTeamId();
         if (teamId == null) {
             throw new CustomException("Null teamId");
         }
+
         Contest contest = contestService.findContestById(contestId);
         Team team = teamRepository.findTeamById(teamId);
 
-        checkTeamRegistration(team, contestId);
 
         if (team.getRank() == null) {
             throw new CustomException("Cannot promote. Null rank");
@@ -196,6 +215,11 @@ public List<Team> findTeamsByContestantIdAndContestId(Long personId, Long contes
             throw new CustomException("Cannot promote. Out of superContest Capacity");
         }
 
+        checkCoach(team);
+        checkDistinctMembers(team);
+        checkTeamMemberAge(team);
+        checkTeamMembersInOtherTeam(team, superContestId);
+        checkDistinctMembers(team);
         team.setContest(contestService.findContestById(superContestId));
         team.setPromotedFromContestId(contestId);
         teamRepository.save(team);

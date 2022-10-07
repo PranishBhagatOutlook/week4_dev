@@ -24,7 +24,7 @@ public class SuperRepository {
                 true, new Date("01/01/2021"), new Date("12/31/2021"), contest.getId(), true);
 
         Contest contest2 = createContest(4, new Date("01/01/2022"), "2022 Regionals 2",
-                true, new Date("01/01/2021"), new Date("12/31/2021"), contest.getId(), true);
+                true, new Date("01/01/2021"), new Date("12/31/2021"), contest.getId(), false);
         Contest contest3 = createContest(5, new Date("01/01/2022"), "2022 Regionals 3",
                 true, new Date("01/01/2021"), new Date("12/31/2021"), contest.getId(), true);
 
@@ -48,6 +48,10 @@ public class SuperRepository {
         Person person18 = createPerson(new Date("2/2/2002"), "18bhagatpranish@gmail.com", "18Pranish Bhagat", "18Baylor University");
         Person person19 = createPerson(new Date("2/2/2002"), "19bhagatpranish@gmail.com", "19Pranish Bhagat", "19Baylor University");
         Person person20 = createPerson(new Date("2/2/2002"), "20bhagatpranish@gmail.com", "20Pranish Bhagat", "20Baylor University");
+        Person person21 = createPerson(new Date("2/2/2002"), "21bhagatpranish@gmail.com", "21Pranish Bhagat", "21Baylor University");
+        Person person22 = createPerson(new Date("2/2/2002"), "22bhagatpranish@gmail.com", "22Pranish Bhagat", "22Baylor University");
+        Person person23 = createPerson(new Date("2/2/2002"), "23bhagatpranish@gmail.com", "23Pranish Bhagat", "23Baylor University");
+        Person person24 = createPerson(new Date("2/2/2002"), "24bhagatpranish@gmail.com", "24Pranish Bhagat", "24Baylor University");
 
 
         Person contestManager = createPerson(new Date("10/12/1993"), "contestmanager@gmail.com", "Contest Manager", "Contest Manager University");
@@ -55,17 +59,23 @@ public class SuperRepository {
         contest.getContestManager().add(contestManager);
 
         // check for Contest Register
+        // check for null coach
+        // 30
         Team team1 = createTeam("Team1", 1, Team.State.PENDING, true);
         team1.getContestant().add(person1);
         team1.getContestant().add(person2);
         team1.getContestant().add(person3);
 
+        // check for age greater than 24
+        // 31
         Team team2 = createTeam("Team2", null, Team.State.PENDING, true);
         team2.getContestant().add(person4);
         team2.getContestant().add(person5);
         team2.getContestant().add(person6);
         team2.setCoach(person7);
 
+        // check for distinct members
+        // 32
         Team team3 = createTeam("Team3", 6, Team.State.PENDING, true);
         team3.getContestant().add(person8);
         team3.getContestant().add(person9);
@@ -73,6 +83,8 @@ public class SuperRepository {
         team3.setCoach(person10);
 //        team3.setContest(contest);
 
+        // valid Contest Register
+        // 33
         Team team4 = createTeam("Team4", 2, Team.State.PENDING, true);
         team4.getContestant().add(person8);
         team4.getContestant().add(person9);
@@ -80,24 +92,41 @@ public class SuperRepository {
         team4.setCoach(person11);
 //        team4.setContest(contest);
 
-        Team team5 = createTeam("Team5", 6, Team.State.PENDING, true);
-        team5.getContestant().add(person12);
-        team5.getContestant().add(person13);
+        // valid contest Register
+        // 34
+        Team team8 = createTeam("Team5", 1, Team.State.PENDING, true);
+        team8.getContestant().add(person19);
+        team8.getContestant().add(person20);
+        team8.getContestant().add(person21);
+        team8.setCoach(person24);
+
+        // valid contest Register
+        // 35
+        Team team5 = createTeam("Team6", 6, Team.State.PENDING, true);
+        team5.getContestant().add(person8);
+        team5.getContestant().add(person9);
         team5.getContestant().add(person10);
         team5.setCoach(person11);
 
         // check for Team Promotion
-        Team team6 = createTeam("Team6", 1, Team.State.PENDING, true);
+        // team members in different team
+        // 36
+        Team team6 = createTeam("Team7", 1, Team.State.PENDING, true);
+        team6.getContestant().add(person12);
+        team6.getContestant().add(person13);
         team6.getContestant().add(person14);
-        team6.getContestant().add(person15);
-        team6.getContestant().add(person16);
         team6.setCoach(person17);
 
-        Team team7 = createTeam("Team7", 1, Team.State.PENDING, true);
+        // valid contest Register
+        // 37
+        // superContest limit reached
+        Team team7 = createTeam("Team8", 1, Team.State.PENDING, true);
+        team7.getContestant().add(person15);
+        team7.getContestant().add(person16);
         team7.getContestant().add(person18);
-        team7.getContestant().add(person19);
-        team7.getContestant().add(person20);
         team7.setCoach(person17);
+
+
     }
 
 
