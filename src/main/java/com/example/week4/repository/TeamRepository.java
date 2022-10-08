@@ -17,14 +17,12 @@ import java.util.List;
 @Repository
 @Transactional
 public interface TeamRepository extends CrudRepository<Team, Long> {
-//    public Team findTeamById(Long id);
-
 
     List<Team> findByContestId(Long contestId);
 
     Team findTeamById(Long teamId);
 
     List<Team> findTeamsByContestantIdAndContestId(@Param("personId") Long personId,
-                                                 @Param("contestId") Long contestId);
+                                                   @Param("contestId") Long contestId);
 
 }

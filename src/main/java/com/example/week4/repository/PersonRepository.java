@@ -18,6 +18,4 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
     List<Person> getPersonByTeamId(@Param("teamId") Long teamId);
 
 
-
-
 }

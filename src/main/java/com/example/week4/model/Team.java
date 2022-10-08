@@ -26,7 +26,7 @@ public class Team implements Serializable {
     @Column(nullable = true)
     private Long promotedTeamId;
 
-    @Column(nullable=true)
+    @Column(nullable = true)
     private Long promotedFromContestId;
 
 
@@ -38,21 +38,20 @@ public class Team implements Serializable {
         this.promotedFromContestId = promotedFromContestId;
     }
 
-    @Size(min=1,max=3)
+    @Size(min = 1, max = 3)
     @ManyToMany
     private Set<Person> contestant = new HashSet();
     //    @Column(nullable = false)
     @NotNull
     @ManyToOne
     private Contest contest;
-    @Size(min = 0, max =1)
+    @Size(min = 0, max = 1)
     @OneToOne
     private Person coach;
+
     public static enum State {
         ACCEPTED, PENDING, CANCELED
     }
-
-
 
 
     public Set<Person> getContestant() {
@@ -121,7 +120,6 @@ public class Team implements Serializable {
     public void setPromotedTeamId(Long promotedTeamId) {
         this.promotedTeamId = promotedTeamId;
     }
-
 
 
 }

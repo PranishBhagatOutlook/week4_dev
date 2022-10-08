@@ -1,9 +1,6 @@
 package com.example.week4.controller;
 
 import com.example.week4.model.Contest;
-import com.example.week4.model.ContestDto;
-import com.example.week4.model.Team;
-import com.example.week4.repository.ContestRepository;
 import com.example.week4.services.ContestService;
 import com.example.week4.services.SuperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class ContestController {
     @Autowired
     private SuperRepository superRepository;
-    @Autowired
-    private ContestRepository contestRepository;
+
     @Autowired
     private ContestService contestService;
-
 
 
     @RequestMapping(value = "/contests", method = RequestMethod.GET)
@@ -43,32 +38,31 @@ public class ContestController {
     }
 
 
-
-    @PutMapping(path="/editContest/{contestId}")
+    @PutMapping(path = "/editContest/{contestId}")
     public Contest editContest(
             @PathVariable("contestId") Long contestId,
             @RequestBody Contest contest) {
-        return contestService.editContest(contestId,contest);
+        return contestService.editContest(contestId, contest);
     }
 
-    @PutMapping(path="/setEditable/{contestId}")
+    @PutMapping(path = "/setEditable/{contestId}")
     public Contest setEditable(
             @PathVariable("contestId") Long contestId
-           ) {
+    ) {
         return contestService.setEditable(contestId);
     }
 
 
-    @PutMapping(path="/setReadOnly/{contestId}")
+    @PutMapping(path = "/setReadOnly/{contestId}")
     public Contest setReadOnly(
-            @PathVariable("contestId") Long contestId){
-       return contestService.setReadOnly(contestId);
+            @PathVariable("contestId") Long contestId) {
+        return contestService.setReadOnly(contestId);
     }
 
-    @PutMapping(path="/editName/{contestId}")
+    @PutMapping(path = "/editName/{contestId}")
     public Contest editName(
             @PathVariable("contestId") Long contestId,
-            @RequestParam("name") String name){
+            @RequestParam("name") String name) {
         return contestService.editName(contestId, name);
     }
 

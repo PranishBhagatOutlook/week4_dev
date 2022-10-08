@@ -6,8 +6,6 @@ import com.example.week4.model.Person;
 import com.example.week4.model.PromoteTeamDTO;
 import com.example.week4.model.Team;
 import com.example.week4.repository.TeamRepository;
-import lombok.val;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -138,14 +136,14 @@ public class TeamService {
         Team team = findTeamById(teamId);
 
         if (team.getContest() == null || team.getContest().getWritable() == true) {
-           team.setName(name);
+            team.setName(name);
             teamRepository.save(team);
         }
 
         if (team.getContest().getWritable() == false) {
             throw new CustomException("The contest writable is set to false. You cannot edit the team info");
         }
-      return team;
+        return team;
     }
 
 
@@ -193,7 +191,7 @@ public class TeamService {
         return promotedTeam;
     }
 
-    public Team promotedTeam(Team team, long contestId){
+    public Team promotedTeam(Team team, long contestId) {
         Team promotedTeam = new Team();
         Contest contest = contestService.findContestById(contestId);
         promotedTeam.setName(team.getName());
@@ -203,7 +201,7 @@ public class TeamService {
         promotedTeam.setCoach(team.getCoach());
         promotedTeam.setContest(contestService.findContestById(contest.getSuperContestId()));
         promotedTeam.setPromotedFromContestId(contestId);
-        for (Person p : team.getContestant()){
+        for (Person p : team.getContestant()) {
             promotedTeam.getContestant().add(p);
         }
         return promotedTeam;

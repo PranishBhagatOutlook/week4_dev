@@ -1,8 +1,5 @@
 package com.example.week4.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -81,13 +78,6 @@ public class Person implements Serializable {
         this.birthDate = birthDate;
     }
 
-//    public Team getTeam() {
-//        return team;
-//    }
-//
-//    public void setTeam(Team team) {
-//        this.team = team;
-//    }
 
     public Set<Contest> getContests() {
         return contests;

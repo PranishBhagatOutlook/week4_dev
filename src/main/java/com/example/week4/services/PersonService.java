@@ -1,9 +1,6 @@
 package com.example.week4.services;
 
-import com.example.week4.model.Contest;
 import com.example.week4.model.Person;
-import com.example.week4.model.Team;
-import com.example.week4.repository.ContestRepository;
 import com.example.week4.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

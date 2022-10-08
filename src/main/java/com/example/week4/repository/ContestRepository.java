@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 @Transactional
 public interface ContestRepository extends CrudRepository<Contest, Long> {
-//    public Team findTeamById(Long id);
 
     Contest findContestById(@Param("contestId") Long contestId);
 

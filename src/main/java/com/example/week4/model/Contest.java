@@ -13,8 +13,6 @@ public class Contest implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    // this is the parentId for the subContests.
-
 
     @Column(nullable = false)
     private Integer capacity;
@@ -32,7 +30,7 @@ public class Contest implements Serializable {
 
     @Column(nullable = false)
     private Date registration_to;
-    @Size(max=1)
+    @Size(max = 1)
     private Long superContestId;
 
     private Boolean writable;
