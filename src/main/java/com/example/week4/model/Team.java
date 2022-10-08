@@ -29,16 +29,6 @@ public class Team implements Serializable {
     @Column(nullable=true)
     private Long promotedFromContestId;
 
-    @Column(nullable = true)
-    private Long originalTeamId;
-
-    public Long getOriginalTeamId() {
-        return originalTeamId;
-    }
-
-    public void setOriginalTeamId(Long originalTeamId) {
-        this.originalTeamId = originalTeamId;
-    }
 
     public Long getPromotedFromContestId() {
         return promotedFromContestId;
@@ -61,15 +51,7 @@ public class Team implements Serializable {
     public static enum State {
         ACCEPTED, PENDING, CANCELED
     }
-    private Boolean writable;
 
-    public Boolean getWritable() {
-        return writable;
-    }
-
-    public void setWritable(Boolean writable) {
-        this.writable = writable;
-    }
 
 
 

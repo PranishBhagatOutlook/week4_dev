@@ -24,6 +24,7 @@ public class TeamService {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
     @Autowired
     private TeamRepository teamRepository;
 
@@ -51,29 +52,15 @@ public class TeamService {
     }
 
 
-    public Team registerTeam(Team team){
-        Team registeredTeam = new Team();
-        registeredTeam.setName(team.getName());
-        registeredTeam.setRank(team.getRank());
-        registeredTeam.setState(team.getState());
-        registeredTeam.setWritable(team.getWritable());
-        registeredTeam.setCoach(team.getCoach());
-        registeredTeam.setOriginalTeamId(team.getId());
-        for (Person p: team.getContestant()){
-            registeredTeam.getContestant().add(p);
-        }
-        return registeredTeam;
-    }
-
     public Team contestRegister(Long teamId, Long contestId) {
         Contest contest = contestService.findContestById(contestId);
         Team team = checkTeamRegistration(teamRepository.findTeamById(teamId), contestId);
-        Team registeredTeam = registerTeam(team);
-        registeredTeam.setContest(contest);
-        teamRepository.save(registeredTeam);
-        return registeredTeam;
+        team.setContest(contest);
+        teamRepository.save(team);
+        return team;
     }
-    public Team checkTeamRegistration(Team team, Long contestId){
+
+    public Team checkTeamRegistration(Team team, Long contestId) {
         checkCoach(team);
         checkTeamMemberCount(team);
         contestService.checkAvailableCapacity(contestId);
@@ -82,40 +69,42 @@ public class TeamService {
         checkTeamMembersInOtherTeam(team, contestId);
         return team;
     }
-public List<Team> findTeamsByContestantIdAndContestId(Long personId, Long contestId){
-   return teamRepository.findTeamsByContestantIdAndContestId(personId, contestId);
-}
 
-    public void checkTeamMembersInOtherTeam(Team team, Long contestId){
+    public List<Team> findTeamsByContestantIdAndContestId(Long personId, Long contestId) {
+        return teamRepository.findTeamsByContestantIdAndContestId(personId, contestId);
+    }
+
+    public void checkTeamMembersInOtherTeam(Team team, Long contestId) {
         List<Person> contestants = getAllTeamMember(team);
         Integer size;
-        for (Person p: contestants) {
-         size = teamRepository.findTeamsByContestantIdAndContestId(p.getId(),contestId).size();
-         if (size >= 1){
-             throw new CustomException("Same person cannot be in multiple teams in the same contest");
-         }
+        for (Person p : contestants) {
+            size = teamRepository.findTeamsByContestantIdAndContestId(p.getId(), contestId).size();
+            if (size >= 1) {
+                throw new CustomException("Same person cannot be in multiple teams in the same contest");
+            }
         }
     }
 
-    public void checkDistinctMembers(Team team){
+    public void checkDistinctMembers(Team team) {
         List<Person> allMembers = getAllMember(team);
         Set uniqueMembers = new HashSet(allMembers);
-        if (allMembers.size() != uniqueMembers.size()){
+        if (allMembers.size() != uniqueMembers.size()) {
             throw new CustomException("Team must have unique team members");
         }
     }
 
-    public void checkTeamMemberCount(Team team){
+    public void checkTeamMemberCount(Team team) {
         List<Person> teamMembers = getAllTeamMember(team);
-        if(teamMembers.size() > 3){
+        if (teamMembers.size() > 3) {
             throw new CustomException("The count of team members cannot be greater than 3");
         }
 
     }
-    public void checkCoach(Team team){
-       if (team.getCoach() == null) {
-           throw new CustomException("There is no coach in the team");
-       }
+
+    public void checkCoach(Team team) {
+        if (team.getCoach() == null) {
+            throw new CustomException("There is no coach in the team");
+        }
     }
 
     public List<Person> getAllTeamMember(Team team) {
@@ -123,7 +112,7 @@ public List<Team> findTeamsByContestantIdAndContestId(Long personId, Long contes
         return teamMembers;
     }
 
-    public List<Person> getAllMember(Team team){
+    public List<Person> getAllMember(Team team) {
         List<Person> allMembers = new ArrayList<Person>(team.getContestant());
         allMembers.add(team.getCoach());
         return allMembers;
@@ -138,46 +127,25 @@ public List<Team> findTeamsByContestantIdAndContestId(Long personId, Long contes
             cal.setTime(d);
             actualAge.add(2022 - cal.get(Calendar.YEAR));
         }
-       for (int i = 0; i < actualAge.size(); i++){
-           if(actualAge.get(i) > 24){
-               throw new CustomException("Cannot register. Team member has age greater than 24.");
-           }
-       }
-    }
-
-    public Team editTeam(@PathVariable("teamId") Long teamId,
-                         @RequestBody Team team) {
-        Team newTeam = new Team();
-        Optional<Team> oldTeam = teamRepository.findById(teamId);
-        if (oldTeam.isPresent()) {
-            if (oldTeam.get().getWritable() == true) {
-                team.setId(teamId);
-                newTeam = teamRepository.save(team);
-            } else {
-                return null;
+        for (int i = 0; i < actualAge.size(); i++) {
+            if (actualAge.get(i) > 24) {
+                throw new CustomException("Cannot register. Team member has age greater than 24.");
             }
         }
-        return newTeam;
     }
 
-
-    public Team setEditable(@PathVariable("contestId") Long teamId, Boolean writable) {
+    public Team editTeamName(@PathVariable("teamId") Long teamId, String name) {
         Team team = findTeamById(teamId);
-        team.setWritable(writable);
-        teamRepository.save(team);
-        return team;
-    }
 
-    public Team setReadOnly(@PathVariable("contestId") Long teamId, Boolean writable) {
-        Team team = findTeamById(teamId);
-        team.setWritable(writable);
-        teamRepository.save(team);
-        return team;
-    }
+        if (team.getContest() == null || team.getContest().getWritable() == true) {
+           team.setName(name);
+            teamRepository.save(team);
+        }
 
-    public Team checkRules(Team team) {
-
-        return null;
+        if (team.getContest().getWritable() == false) {
+            throw new CustomException("The contest writable is set to false. You cannot edit the team info");
+        }
+      return team;
     }
 
 
@@ -220,10 +188,25 @@ public List<Team> findTeamsByContestantIdAndContestId(Long personId, Long contes
         checkTeamMemberAge(team);
         checkTeamMembersInOtherTeam(team, superContestId);
         checkDistinctMembers(team);
-        team.setContest(contestService.findContestById(superContestId));
-        team.setPromotedFromContestId(contestId);
-        teamRepository.save(team);
-        return team;
+        Team promotedTeam = promotedTeam(team, contestId);
+        teamRepository.save(promotedTeam);
+        return promotedTeam;
+    }
+
+    public Team promotedTeam(Team team, long contestId){
+        Team promotedTeam = new Team();
+        Contest contest = contestService.findContestById(contestId);
+        promotedTeam.setName(team.getName());
+        promotedTeam.setRank(team.getRank());
+        promotedTeam.setState(team.getState());
+        promotedTeam.setPromotedTeamId(team.getId());
+        promotedTeam.setCoach(team.getCoach());
+        promotedTeam.setContest(contestService.findContestById(contest.getSuperContestId()));
+        promotedTeam.setPromotedFromContestId(contestId);
+        for (Person p : team.getContestant()){
+            promotedTeam.getContestant().add(p);
+        }
+        return promotedTeam;
     }
 }
 

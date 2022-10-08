@@ -18,7 +18,7 @@ public class SuperRepository {
     private EntityManager em;
 
     public void populate() {
-        Contest contest = createContest(2, new Date("01/01/2022"), "45th World Finals",
+        Contest contest = createContest(1, new Date("01/01/2022"), "45th World Finals",
                 true, new Date("01/01/2021"), new Date("12/31/2021"), null, false);
         Contest contest1 = createContest(3, new Date("01/01/2022"), "2022 Regionals 1",
                 true, new Date("01/01/2021"), new Date("12/31/2021"), contest.getId(), true);
@@ -61,14 +61,14 @@ public class SuperRepository {
         // check for Contest Register
         // check for null coach
         // 30
-        Team team1 = createTeam("Team1", 1, Team.State.PENDING, true);
+        Team team1 = createTeam("Team1", 1, Team.State.PENDING);
         team1.getContestant().add(person1);
         team1.getContestant().add(person2);
         team1.getContestant().add(person3);
 
         // check for age greater than 24
         // 31
-        Team team2 = createTeam("Team2", null, Team.State.PENDING, true);
+        Team team2 = createTeam("Team2", null, Team.State.PENDING);
         team2.getContestant().add(person4);
         team2.getContestant().add(person5);
         team2.getContestant().add(person6);
@@ -76,7 +76,7 @@ public class SuperRepository {
 
         // check for distinct members
         // 32
-        Team team3 = createTeam("Team3", 6, Team.State.PENDING, true);
+        Team team3 = createTeam("Team3", 6, Team.State.PENDING);
         team3.getContestant().add(person8);
         team3.getContestant().add(person9);
         team3.getContestant().add(person10);
@@ -85,7 +85,7 @@ public class SuperRepository {
 
         // valid Contest Register
         // 33
-        Team team4 = createTeam("Team4", 2, Team.State.PENDING, true);
+        Team team4 = createTeam("Team4", 2, Team.State.PENDING);
         team4.getContestant().add(person8);
         team4.getContestant().add(person9);
         team4.getContestant().add(person10);
@@ -94,7 +94,7 @@ public class SuperRepository {
 
         // valid contest Register
         // 34
-        Team team8 = createTeam("Team5", 1, Team.State.PENDING, true);
+        Team team8 = createTeam("Team5", 1, Team.State.PENDING);
         team8.getContestant().add(person19);
         team8.getContestant().add(person20);
         team8.getContestant().add(person21);
@@ -102,7 +102,7 @@ public class SuperRepository {
 
         // valid contest Register
         // 35
-        Team team5 = createTeam("Team6", 6, Team.State.PENDING, true);
+        Team team5 = createTeam("Team6", 6, Team.State.PENDING);
         team5.getContestant().add(person8);
         team5.getContestant().add(person9);
         team5.getContestant().add(person10);
@@ -111,7 +111,7 @@ public class SuperRepository {
         // check for Team Promotion
         // team members in different team
         // 36
-        Team team6 = createTeam("Team7", 1, Team.State.PENDING, true);
+        Team team6 = createTeam("Team7", 1, Team.State.PENDING);
         team6.getContestant().add(person12);
         team6.getContestant().add(person13);
         team6.getContestant().add(person14);
@@ -120,7 +120,7 @@ public class SuperRepository {
         // valid contest Register
         // 37
         // superContest limit reached
-        Team team7 = createTeam("Team8", 1, Team.State.PENDING, true);
+        Team team7 = createTeam("Team8", 1, Team.State.PENDING);
         team7.getContestant().add(person15);
         team7.getContestant().add(person16);
         team7.getContestant().add(person18);
@@ -160,12 +160,11 @@ public class SuperRepository {
         return person;
     }
 
-    private Team createTeam(String name, Integer rank, Team.State state, Boolean writable) {
+    private Team createTeam(String name, Integer rank, Team.State state) {
         Team team = new Team();
         team.setName(name);
         team.setRank(rank);
         team.setState(state);
-        team.setWritable(writable);
         em.persist(team);
         return team;
     }

@@ -60,25 +60,11 @@ public class TeamController{
 
 
 
-    @PutMapping(path="/editTeam/{teamId}")
-    public Team editTeam(
-            @PathVariable("teamId") Long teamId,
-            @RequestBody Team team) {
-        return teamService.editTeam(teamId,team);
-    }
-
-    @PutMapping(path="/setEditable/{teamId}/{writable}")
-    public Team setEditable(
-            @PathVariable("teamId") Long teamId,
-            @PathVariable("writable") Boolean writable) {
-        return teamService.setEditable(teamId,writable);
-    }
-
-    @PutMapping(path="/setReadOnly/{teamId}/{writable}")
-    public Team setReadOnly(
-            @PathVariable("teamId") Long teamId,
-            @PathVariable("writable") Boolean writable) {
-        return teamService.setReadOnly(teamId,writable);
+    @PutMapping(path="/editName/{teamId}")
+    public Team editTeamName(
+            @PathVariable("teamId") Long teamId, @RequestParam("name") String name)
+            {
+        return teamService.editTeamName(teamId, name);
     }
 
 
